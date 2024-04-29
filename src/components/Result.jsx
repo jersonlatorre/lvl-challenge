@@ -84,7 +84,7 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
       </section>
       <section ref={phraseRef} className="w-1/2 lowercase">
         {parts.map((part, i) => (
-          <span key={i} className="inline-block text-2xl m-1 scale-0 bg-white bg-opacity-15 p-2 rounded-2xl">
+          <span key={i} className="sinusoidal-animation inline-block text-2xl m-1 scale-0 bg-white bg-opacity-15 p-2 rounded-2xl" style={{ animationDelay: i * 0.3 + 's' }}>
             {part}
           </span>
         ))}
