@@ -98,7 +98,7 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
         )}
         {author == '' ? (
           <button onClick={handleAuthorClick} className="bg-white text-black text-3xl p-2 ml-4 rounded-2xl mt-10">
-            OK
+            ✔
           </button>
         ) : null}
       </section>
