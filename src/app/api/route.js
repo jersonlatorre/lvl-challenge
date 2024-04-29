@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true,
+  // dangerouslyAllowBrowser: true,
 })
 
 const prodia = createProdia({
