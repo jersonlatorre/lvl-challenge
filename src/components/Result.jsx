@@ -77,7 +77,7 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
           </div>
         ) : (
           <div className="flex flex-col justify-center items-center mb-10">
-            <p className="text-1xl mb-3 opacity-20">ando pintando...</p>
+            <p className="text-1xl mb-3 opacity-20">pintando...</p>
             <BarLoader color="white" />
           </div>
         )}
