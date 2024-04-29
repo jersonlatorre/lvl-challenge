@@ -69,7 +69,7 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
   }
 
   return (
-    <div className="bg-black text-white w-screen h-screen text-center flex flex-col justify-center items-center">
+    <div className="bg-almost-black text-white w-screen h-screen text-center flex flex-col justify-center items-center">
       <section ref={imageRef}>
         {imageUrl ? (
           <div className="relative mb-8" style={{ width: 'min(50vw, 50vh)', height: 'min(50vw, 50vh)' }}>
@@ -77,7 +77,7 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
           </div>
         ) : (
           <div className="flex flex-col justify-center items-center mb-10">
-            <p className="text-1xl mb-3 opacity-20">generando imagen...</p>
+            <p className="text-1xl mb-3 opacity-20">ando pintando...</p>
             <BarLoader color="white" />
           </div>
         )}
