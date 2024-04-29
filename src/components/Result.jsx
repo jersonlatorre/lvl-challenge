@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import BarLoader from 'react-spinners/BarLoader'
 import Global from '../global'
+import Image from 'next/image'
 import gsap from 'gsap'
 import useLocalStorage from '../hooks/useLocalStorage'
 
@@ -73,7 +74,8 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
     <div className="bg-black text-white w-screen h-screen text-center flex flex-col justify-center items-center">
       <section ref={imageRef} className="mb-10">
         {imageUrl ? (
-          <img src={imageUrl} alt="image" className="w-1/2 mx-auto transition-all duration-200 rounded-2xl" />
+          // <img src={imageUrl} alt="image" className="w-1/2 mx-auto transition-all duration-200 rounded-2xl" />
+          <Image src={imageUrl} layout="fill" objectFit="contain" alt="image" className="w-1/2 mx-auto transition-all duration-200 rounded-2xl"></Image>
         ) : (
           <div className="flex flex-col justify-center items-center">
             <p className="text-1xl mb-3 opacity-20">generando imagen...</p>

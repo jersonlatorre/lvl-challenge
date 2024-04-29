@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import useLocalStorage from '../../hooks/useLocalStorage'
 
 export default function Artworks() {
@@ -12,7 +13,9 @@ export default function Artworks() {
         {artworks.map((artwork, i) => (
           <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-3" key={i}>
             <div className="bg-white p-4 rounded-lg drop-shadow-lg">
-              <img src={artwork.imageUrl} alt="artwork" className="w-full h-auto mb-2 rounded-md" />
+
+              {/* <img src={artwork.imageUrl} alt="artwork" className="w-full h-auto mb-2 rounded-md" /> */}
+              <Image src={artwork.imageUrl} alt="artwork" className="w-full h-auto mb-2 rounded-md"></Image>
               <div className="text-center my-2 text-2xl">
                 {artwork.emojis?.map((emoji, j) => (
                   <span key={j} className="mx-1">
