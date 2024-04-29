@@ -13,9 +13,9 @@ export default function Artworks() {
         {artworks.map((artwork, i) => (
           <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-3" key={i}>
             <div className="bg-white p-4 rounded-lg drop-shadow-lg">
-
-              {/* <img src={artwork.imageUrl} alt="artwork" className="w-full h-auto mb-2 rounded-md" /> */}
-              <Image src={artwork.imageUrl} alt="artwork" className="w-full h-auto mb-2 rounded-md"></Image>
+              <div className="relative w-full h-64 mb-3">
+                <Image src={artwork.imageUrl} alt="artwork" className="w-full h-auto mb-2 rounded-md" layout="fill" objectFit="contain"></Image>
+              </div>
               <div className="text-center my-2 text-2xl">
                 {artwork.emojis?.map((emoji, j) => (
                   <span key={j} className="mx-1">
@@ -29,9 +29,8 @@ export default function Artworks() {
           </div>
         ))}
       </div>
-      <a href="/" className="absolute top-10 left-5 text-1xl flex items-center">
-        <span className="mr-2 text-2xl translate-y">←</span>
-        <span>volver</span>
+      <a href="/" className="absolute top-10 left-5 text-md ml-4 hover:text-gray-400">
+        <span>{'< atrás'}</span>
       </a>
     </>
   )

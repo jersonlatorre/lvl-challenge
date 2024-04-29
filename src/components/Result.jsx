@@ -72,12 +72,13 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
 
   return (
     <div className="bg-black text-white w-screen h-screen text-center flex flex-col justify-center items-center">
-      <section ref={imageRef} className="mb-10">
+      <section ref={imageRef}>
         {imageUrl ? (
-          // <img src={imageUrl} alt="image" className="w-1/2 mx-auto transition-all duration-200 rounded-2xl" />
-          <Image src={imageUrl} layout="fill" objectFit="contain" alt="image" className="w-1/2 mx-auto transition-all duration-200 rounded-2xl"></Image>
+          <div className="relative mb-8" style={{ width: 'min(50vw, 50vh)', height: 'min(50vw, 50vh)' }}>
+            <Image src={imageUrl} layout="fill" objectFit="contain" alt="image" className="rounded-xl"></Image>
+          </div>
         ) : (
-          <div className="flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center mb-10">
             <p className="text-1xl mb-3 opacity-20">generando imagen...</p>
             <BarLoader color="white" />
           </div>
@@ -104,12 +105,11 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
         ) : null}
       </section>
       <section ref={navigationRef} className="opacity-0">
-        <a href="/" className="absolute top-5 left-5 text-3xl opacity-50 hover:opacity-100">
-          ←
+        <a href="/" className="absolute top-5 left-5 text-1xl opacity-50 hover:opacity-100">
+          {'< atrás'}
         </a>
         <a href="/artworks" className="absolute top-5 right-5 text-1xl opacity-50 hover:opacity-100 flex items-center">
-          <span>ver obras</span>
-          <span className="inline-block text-3xl ml-2 :hover:opacity-100">→</span>
+          <span>{'ver obras >'}</span>
         </a>
       </section>
     </div>
