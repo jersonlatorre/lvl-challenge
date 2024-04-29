@@ -1,3 +1,3 @@
 # AI Challenge
 
-Proyecto interactivo de generación de historias con Inteligencia Artificial
+Proyecto interactivo de generación de historias con Inteligencia Artificial (GPT + Dalle)
