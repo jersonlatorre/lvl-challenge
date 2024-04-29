@@ -1,10 +1,16 @@
 import { OpenAI } from 'openai'
-export const maxDuration = 120
+import { createProdia } from 'prodia'
+
+export const maxDuration = 10
 export const dynamic = 'force-dynamic'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
   dangerouslyAllowBrowser: true,
+})
+
+const prodia = createProdia({
+  apiKey: process.env.PRODIA_API_KEY,
 })
 
 const requestPhrase = async (words) => {
@@ -23,13 +29,23 @@ const requestImage = async (phrase) => {
   const prompt = `creame una pintura impresionista, con los elementos bien reconocibles, sin texto, que se parezca a la siguiente oración: "${phrase}"`
 
   const response = await openai.images.generate({
-    model: 'dall-e-3',
+    model: 'dall-e-2',
     prompt: prompt,
     n: 1,
     size: '1024x1024',
   })
-
+  
   return response.data[0].url
+
+  // const job = await prodia.generate({
+  //   prompt: prompt,
+  // })
+
+  // console.log(job)
+
+  // const { imageUrl, status } = await prodia.wait(job)
+  // console.log(status)
+  // return imageUrl
 }
 
 export async function GET(request) {
