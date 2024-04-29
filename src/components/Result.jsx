@@ -38,8 +38,7 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
   }, [imageUrl])
 
   useEffect(() => {
-    console.log(Global.selectedItems)
-    let parts = phrase.split(/\s+|(?=[.,])/)
+    let parts = phrase.split(/\s+|(?=[.,!?¡¿])/)
     parts = parts.map((part) => {
       const emoji = Global.selectedItems.find((emoji) => emoji.name === part)
       if (emoji) {
@@ -49,7 +48,6 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
       }
     })
 
-    console.log(parts)
     setParts(parts)
   }, [phrase])
 
@@ -75,7 +73,7 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
       <section ref={imageRef}>
         {imageUrl ? (
           <div className="relative mb-8" style={{ width: 'min(50vw, 50vh)', height: 'min(50vw, 50vh)' }}>
-            <Image src={imageUrl} layout="fill" objectFit="contain" alt="image" className="rounded-xl"></Image>
+            <Image src={imageUrl} fill alt="image" className="rounded-xl"></Image>
           </div>
         ) : (
           <div className="flex flex-col justify-center items-center mb-10">

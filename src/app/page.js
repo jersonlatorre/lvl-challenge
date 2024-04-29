@@ -49,6 +49,7 @@ export default function Home() {
       const fetchedImageUrl = await fetch(`/api/?type=image&phrase=${uriPhrase}`).then((res) => res.text())
       setImageUrl(fetchedImageUrl)
 
+      if (!typeof window) return
       setArtworks([...artworks, { id: newId, phrase: fetchedPhrase, imageUrl: fetchedImageUrl, emojis: emojisSymbols, author: '' }])
     }
 

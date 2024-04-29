@@ -2,13 +2,17 @@ import { useDebugValue, useEffect, useState } from 'react'
 
 const useLocalStorage = (key, initialState) => {
   const [state, setState] = useState(() => {
-    const item = localStorage.getItem(key)
+    let item
+    if (typeof window === 'undefined') return
+    item = localStorage.getItem(key)
+
     return item ? parse(item) : initialState
   })
 
   useDebugValue(state)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
     localStorage.setItem(key, JSON.stringify(state))
   }, [state, key])
 

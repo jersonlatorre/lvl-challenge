@@ -39,7 +39,6 @@ export async function GET(request) {
   if (type === 'phrase') {
     const words = JSON.parse(searchParams.get('words'))
     const phrase = await requestPhrase(words)
-    console.log(words)
     return new Response(phrase, { status: 200 })
   }
 
