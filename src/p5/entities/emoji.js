@@ -92,7 +92,7 @@ export default class Emoji {
     }
 
     gsap.to(this.position, { x: targetPosition.x, y: targetPosition.y, duration: 2, ease: 'elastic' }).then(() => {
-      gsap.to(this.position, { y: -100, duration: 1, ease: 'back.in' })
+      gsap.to(this.position, { y: -500 * (2 - this.selectionIndex + 1), duration: 1, ease: 'back.in' })
     })
   }
 
