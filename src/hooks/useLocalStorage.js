@@ -1,20 +1,16 @@
-import React, { useDebugValue, useEffect, useState } from 'react'
+import { useDebugValue, useEffect, useState } from 'react'
 
 const useLocalStorage = (key, initialState) => {
-  const [state, setState] = useState(initialState)
+  const [state, setState] = useState(() => {
+    const item = localStorage.getItem(key)
+    return item ? parse(item) : initialState
+  })
 
   useDebugValue(state)
 
   useEffect(() => {
-    const item = localStorage.getItem(key)
-    if (item) setState(parse(item))
-  }, [key])
-
-  useEffect(() => {
-    if (state !== initialState) {
-      localStorage.setItem(key, JSON.stringify(state))
-    }
-  }, [state, key, initialState])
+    localStorage.setItem(key, JSON.stringify(state))
+  }, [state, key])
 
   return [state, setState]
 }
