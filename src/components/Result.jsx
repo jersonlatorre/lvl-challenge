@@ -25,7 +25,7 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
             duration: 1,
             ease: 'elastic',
           })
-          .delay(i * 0.1)
+          .delay(i * 0.2)
       })
     }
   }, [parts])
