@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import BarLoader from 'react-spinners/BarLoader'
 import Global from '../global'
 import gsap from 'gsap'
-import { useLocalStorage } from '@uidotdev/usehooks'
+import useLocalStorage from '../hooks/useLocalStorage'
 
 export default function Result({ id, phrase, imageUrl, emojis }) {
   const [parts, setParts] = useState([])

@@ -1,14 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { useEffect, useState } from 'react'
 
 import Global from '../global'
-import { ReactP5Wrapper } from '@p5-wrapper/react'
-import Result from './Result'
+import Result from '../components/Result'
+import dynamic from 'next/dynamic'
 import sketch from '../p5/sketch'
 import { uid } from 'uid'
-import { useLocalStorage } from '@uidotdev/usehooks'
+import useLocalStorage from '../hooks/useLocalStorage'
+
+const ReactP5Wrapper = dynamic(() => import('@p5-wrapper/react').then((mod) => mod.ReactP5Wrapper), { ssr: false })
 
 export default function Home() {
   const [phrase, setPhrase] = useState('')
@@ -28,36 +29,32 @@ export default function Home() {
       }, 500)
     }
 
+    if (!typeof window) return
     window.addEventListener('selection-finished', handleComplete)
-
-    return () => {
-      window.removeEventListener('selection-finished', handleComplete)
-    }
+    return () => window.removeEventListener('selection-finished', handleComplete)
   }, [])
 
   useEffect(() => {
-    const handleRequest = async (e) => {
-      const id = uid()
-      setId(id)
+    const handleRequest = async () => {
+      const newId = uid()
+      setId(newId)
 
       const uriEmojisNames = encodeURIComponent(JSON.stringify(Global.selectedItems.map((emoji) => emoji.name)))
       const emojisSymbols = Global.selectedItems.map((emoji) => emoji.emoji)
-      const phrase = await fetch(`/api/?type=phrase&words=${uriEmojisNames}`).then((res) => res.text())
+      const fetchedPhrase = await fetch(`/api/?type=phrase&words=${uriEmojisNames}`).then((res) => res.text())
       setEmojis(emojisSymbols)
-      setPhrase(phrase)
+      setPhrase(fetchedPhrase)
 
-      const uriPhrase = encodeURIComponent(phrase)
-      const imageUrl = await fetch(`/api/?type=image&phrase=${uriPhrase}`).then((res) => res.text())
-      setImageUrl(imageUrl)
+      const uriPhrase = encodeURIComponent(fetchedPhrase)
+      const fetchedImageUrl = await fetch(`/api/?type=image&phrase=${uriPhrase}`).then((res) => res.text())
+      setImageUrl(fetchedImageUrl)
 
-      setArtworks([...artworks, { id, phrase, imageUrl, emojis: emojisSymbols, author: '' }])
+      setArtworks([...artworks, { id: newId, phrase: fetchedPhrase, imageUrl: fetchedImageUrl, emojis: emojisSymbols, author: '' }])
     }
 
+    if (!typeof window) return
     window.addEventListener('all-emojis-selected', handleRequest)
-
-    return () => {
-      window.removeEventListener('all-emojis-selected', handleRequest)
-    }
+    return () => window.removeEventListener('all-emojis-selected', handleRequest)
   }, [])
 
   return (

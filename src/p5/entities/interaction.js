@@ -16,26 +16,30 @@ export default class Interaction {
       }
     }
 
-    window.addEventListener('deactivate-emojis', () => {
-      this.emojis.forEach((emoji) => {
-        emoji.div.remove()
-      })
-    })
-
-    window.addEventListener('all-emojis-selected', () => {
-      this.emojis.forEach((emoji) => {
-        emoji.div.remove()
+    if (typeof window) {
+      window.addEventListener('deactivate-emojis', () => {
+        this.emojis.forEach((emoji) => {
+          emoji.div.remove()
+        })
       })
 
-      this.emojis = this.emojis.filter((emoji) => emoji.isSelected)
-      this.emojis.forEach((emoji) => {
-        emoji.startAnimation()
-      })
+      window.addEventListener('all-emojis-selected', () => {
+        this.emojis.forEach((emoji) => {
+          emoji.div.remove()
+        })
 
-      setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('selection-finished'))
-      }, 3000)
-    })
+        this.emojis = this.emojis.filter((emoji) => emoji.isSelected)
+        this.emojis.forEach((emoji) => {
+          emoji.startAnimation()
+        })
+
+        setTimeout(() => {
+          if (typeof window) {
+            window.dispatchEvent(new CustomEvent('selection-finished'))
+          }
+        }, 3000)
+      })
+    }
   }
 
   draw() {
