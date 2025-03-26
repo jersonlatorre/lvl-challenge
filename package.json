@@ -12,7 +12,7 @@
     "@p5-wrapper/react": "^4.4.0",
     "@uidotdev/usehooks": "^2.4.1",
     "gsap": "^3.12.5",
-    "next": "14.2.3",
+    "next": "14.2.25",
     "openai": "^4.38.5",
     "prodia": "^0.3.0",
     "react": "^18",
