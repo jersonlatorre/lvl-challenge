@@ -16,7 +16,7 @@ export default class Interaction {
       }
     }
 
-    if (typeof window) {
+    if (typeof window !== 'undefined') {
       window.addEventListener('deactivate-emojis', () => {
         this.emojis.forEach((emoji) => {
           emoji.div.remove()
@@ -34,7 +34,7 @@ export default class Interaction {
         })
 
         setTimeout(() => {
-          if (typeof window) {
+          if (typeof window !== 'undefined') {
             window.dispatchEvent(new CustomEvent('selection-finished'))
           }
         }, 3000)

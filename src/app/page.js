@@ -18,7 +18,7 @@ export default function Home() {
   const [id, setId] = useState('')
   const [state, setState] = useState('select')
   const [fade, setFade] = useState(true)
-  const [artworks, setArtworks] = useLocalStorage('artworks', [])
+  const [, setArtworks] = useLocalStorage('artworks', [])
 
   useEffect(() => {
     const handleComplete = () => {
@@ -29,7 +29,7 @@ export default function Home() {
       }, 500)
     }
 
-    if (!typeof window) return
+    if (typeof window === 'undefined') return
     window.addEventListener('selection-finished', handleComplete)
     return () => window.removeEventListener('selection-finished', handleComplete)
   }, [])
@@ -41,22 +41,39 @@ export default function Home() {
 
       const uriEmojisNames = encodeURIComponent(JSON.stringify(Global.selectedItems.map((emoji) => emoji.name)))
       const emojisSymbols = Global.selectedItems.map((emoji) => emoji.emoji)
-      const fetchedPhrase = await fetch(`/api/?type=phrase&words=${uriEmojisNames}`).then((res) => res.text())
+
+      const phraseRes = await fetch(`/api/?type=phrase&words=${uriEmojisNames}`)
+      if (!phraseRes.ok) {
+        const err = await phraseRes.json().catch(() => ({}))
+        console.error(err.error || phraseRes.statusText)
+        setPhrase('No se pudo generar la historia.')
+        setEmojis(emojisSymbols)
+        return
+      }
+      const fetchedPhrase = await phraseRes.text()
       setEmojis(emojisSymbols)
       setPhrase(fetchedPhrase)
 
       const uriPhrase = encodeURIComponent(fetchedPhrase)
-      const fetchedImageUrl = await fetch(`/api/?type=image&phrase=${uriPhrase}`).then((res) => res.text())
+      const imageRes = await fetch(`/api/?type=image&phrase=${uriPhrase}`)
+      if (!imageRes.ok) {
+        const err = await imageRes.json().catch(() => ({}))
+        console.error(err.error || imageRes.statusText)
+        return
+      }
+      const fetchedImageUrl = await imageRes.text()
       setImageUrl(fetchedImageUrl)
 
-      if (!typeof window) return
-      setArtworks([...artworks, { id: newId, phrase: fetchedPhrase, imageUrl: fetchedImageUrl, emojis: emojisSymbols, author: '' }])
+      setArtworks((prev) => [
+        ...(prev ?? []),
+        { id: newId, phrase: fetchedPhrase, imageUrl: fetchedImageUrl, emojis: emojisSymbols, author: '' },
+      ])
     }
 
-    if (!typeof window) return
+    if (typeof window === 'undefined') return
     window.addEventListener('all-emojis-selected', handleRequest)
     return () => window.removeEventListener('all-emojis-selected', handleRequest)
-  }, [])
+  }, [setArtworks])
 
   return (
     <div className={`transition-opacity duration-500 ${fade ? 'opacity-100' : 'opacity-0'}`}>

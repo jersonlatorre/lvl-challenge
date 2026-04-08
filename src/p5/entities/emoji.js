@@ -62,7 +62,7 @@ export default class Emoji {
     this.isSelected = true
 
     if (Global.numClicks === 3) {
-      if (typeof window) {
+      if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('deactivate-emojis'))
         setTimeout(() => {
           window.dispatchEvent(new CustomEvent('all-emojis-selected', { detail: Global.selectedItems }))

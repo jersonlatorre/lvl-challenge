@@ -9,7 +9,6 @@
         "gsap": "^3.12.5",
         "next": "14.2.25",
         "openai": "^4.38.5",
-        "prodia": "^0.3.0",
         "react": "^18",
         "react-dom": "^18",
         "react-spinners": "^0.13.8",
@@ -651,8 +650,6 @@
     "postcss-value-parser": ["postcss-value-parser@4.2.0", "", {}, "sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ=="],
 
     "prelude-ls": ["prelude-ls@1.2.1", "", {}, "sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g=="],
-
-    "prodia": ["prodia@0.3.0", "", {}, "sha512-Isp+5kql+CACpwMrNd4jfA4TpSCSAC2m14Lt8aXSYs+btyC2aaRnGxTjCbTpQRkMXHNU8mTpt7R51iqDrynf8Q=="],
 
     "prop-types": ["prop-types@15.8.1", "", { "dependencies": { "loose-envify": "^1.4.0", "object-assign": "^4.1.1", "react-is": "^16.13.1" } }, "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="],
 
