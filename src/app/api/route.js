@@ -26,11 +26,23 @@ function parseWordsParam(raw) {
 }
 
 const requestPhrase = async (words) => {
-  const prompt = `relata una historia, muy creativa, graciosa e irónica, orientada a niños; que quepa en una sola oración de menos de 20 palabras, usando estas palabras: ${words[0]}, ${words[1]} y ${words[2]}. las palabras deben respetarse tal cual, sin modificarlas y sin repetirlas.`
+  const [a, b, c] = words
+  const system = `Eres un autor de microfábulas en español. Tu tono es absurdo gentil: situaciones imposibles o causales ridículas, pero tiernas, nunca crueles ni cinicas.`
+
+  const user = `Escribe una sola oración (máximo 20 palabras) que funcione como fábula miniatura: un mini relato con un giro suavemente absurdo.
+
+Palabras obligatorias — deben aparecer exactamente así, sin cambiar letras ni tildes, y cada una solo una vez: ${a}, ${b}, ${c}.
+
+Evita explícitamente: moralejas didácticas tipo lección; frases de apertura cliché ("había una vez", "erase que se era"); ironía mordaz o sarcasmo que hienda; violencia o miedo; explicar el chiste al final; preguntas retóricas vacías.
+
+Responde únicamente con esa oración, sin comillas ni título.`
 
   const completion = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',
-    messages: [{ role: 'user', content: prompt }],
+    messages: [
+      { role: 'system', content: system },
+      { role: 'user', content: user },
+    ],
     temperature: 0.9,
   })
 
@@ -42,13 +54,24 @@ const requestPhrase = async (words) => {
 }
 
 const requestImage = async (phrase) => {
-  const prompt = `creame una pintura impresionista, con los elementos bien reconocibles, sin texto, que se parezca a la siguiente oración: "${phrase}"`
+  const scene = `Escena e idea a pintar (debe leerse clara a un niño, personajes u objetos reconocibles pero estilizados):\n"${phrase}"`
+
+  const style = `Estilo visual obligatorio:
+- Óleo o acrílico sobre lienzo con trazo MUY visible: pinceladas marcadas, textura de pintura húmeda, impasto sugerido donde encaje.
+- Luz y color de tradición impresionista; en parte del cuadro puede usarse punteo o puntillismo (manchitas de color separadas) mezclado con pincelada suelta — debe notarse que es pintura, no foto.
+- Ilustración de álbum infantil: proporciones ligeramente exageradas, color vivo, sensación plástica y pintada a mano (como doble página de libro ilustrado), no escena documental.`
+
+  const avoid = `NO incluir: ningún texto, letras, números, carteles legibles, marcas de agua, marcos ni bordes ornamentales.
+NO usar: fotorrealismo, piel tipo fotografía, pelo hiperdetallado estilo render, iluminación de estudio tipo stock, CGI 3D liso, aspecto de captura de cámara o snapshot.`
+
+  const prompt = `${scene}\n\n${style}\n\n${avoid}`
 
   const response = await openai.images.generate({
     model: 'dall-e-3',
-    prompt: prompt,
+    prompt,
     n: 1,
     size: '1024x1024',
+    style: 'natural',
   })
 
   const url = response.data?.[0]?.url
