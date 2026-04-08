@@ -6,10 +6,12 @@ import Image from 'next/image'
 import gsap from 'gsap'
 import useLocalStorage from '../hooks/useLocalStorage'
 
-export default function Result({ id, phrase, imageUrl, emojis }) {
+export default function Result({ id, phrase, imageUrl, emojis, generationError }) {
   const [parts, setParts] = useState([])
   const [author, setAuthor] = useState('')
   const [artworks, setArtworks] = useLocalStorage('artworks', [])
+  const [imageReady, setImageReady] = useState(false)
+  const [imageError, setImageError] = useState(false)
   const phraseRef = useRef(null)
   const imageRef = useRef(null)
   const authorRef = useRef(null)
@@ -31,14 +33,23 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
   }, [parts])
 
   useEffect(() => {
-    if (imageUrl) {
-      gsap.to(navigationRef.current, { opacity: 1, duration: 1 })
-      gsap.to(formRef.current, { opacity: 1, duration: 1 })
-    }
+    setImageReady(false)
+    setImageError(false)
   }, [imageUrl])
 
   useEffect(() => {
-    let parts = phrase.split(/\s+|(?=[.,!?¡¿])/)
+    if (imageReady || generationError) {
+      gsap.to(navigationRef.current, { opacity: 1, duration: 1 })
+      gsap.to(formRef.current, { opacity: generationError ? 0 : 1, duration: 1 })
+    }
+  }, [imageReady, generationError])
+
+  useEffect(() => {
+    if (!phrase || generationError === 'phrase') {
+      setParts([])
+      return
+    }
+    let parts = phrase.split(/\s+|(?=[.,!?¡¿])/).filter(Boolean)
     parts = parts.map((part) => {
       const emoji = Global.selectedItems.find((emoji) => emoji.name === part)
       if (emoji) {
@@ -49,7 +60,7 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
     })
 
     setParts(parts)
-  }, [phrase])
+  }, [phrase, generationError])
 
   const handleAuthorClick = () => {
     if (!authorRef.current) return
@@ -71,23 +82,63 @@ export default function Result({ id, phrase, imageUrl, emojis }) {
   return (
     <div className="bg-almost-black text-white w-screen h-screen text-center flex flex-col justify-center items-center">
       <section ref={imageRef}>
-        {imageUrl ? (
+        {generationError === 'phrase' ? (
+          <div
+            className="mb-8 flex min-h-[min(50vw,50vh)] w-[min(90vw,50vh)] max-w-2xl flex-col items-center justify-center rounded-xl bg-white/5 px-6 py-10"
+            style={{ minHeight: 'min(50vw, 50vh)' }}
+          >
+            <p className="text-center text-xl leading-relaxed text-white/90">No se pudo generar la historia. Vuelve atrás e inténtalo otra vez.</p>
+          </div>
+        ) : generationError === 'image' ? (
+          <div
+            className="mb-8 flex min-h-[min(50vw,50vh)] w-[min(90vw,50vh)] max-w-2xl flex-col items-center justify-center rounded-xl bg-white/5 px-6 py-10"
+            style={{ minHeight: 'min(50vw, 50vh)' }}
+          >
+            <p className="text-center text-xl leading-relaxed text-white/90">
+              La historia sí salió, pero no se pudo generar la ilustración. Puedes volver atrás e intentarlo de nuevo.
+            </p>
+          </div>
+        ) : imageUrl ? (
           <div className="relative mb-8" style={{ width: 'min(50vw, 50vh)', height: 'min(50vw, 50vh)' }}>
-            <Image src={imageUrl} fill alt="image" className="rounded-xl"></Image>
+            <Image
+              src={imageUrl}
+              fill
+              alt="Ilustración generada"
+              priority
+              sizes="(max-width: 768px) 90vw, min(50vw, 50vh)"
+              className={`rounded-xl object-contain transition-opacity duration-500 ${imageReady ? 'opacity-100' : 'opacity-0'}`}
+              onLoadingComplete={() => setImageReady(true)}
+              onError={() => setImageError(true)}
+            />
+            {!imageReady && !imageError ? (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-xl bg-almost-black/60">
+                <p className="mb-3 text-xl opacity-80">cargando imagen...</p>
+                <BarLoader color="white" />
+              </div>
+            ) : null}
+            {imageError ? (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-xl bg-almost-black/80 px-4">
+                <p className="text-center text-lg opacity-90">No se pudo mostrar la imagen. Prueba recargar o generar de nuevo.</p>
+              </div>
+            ) : null}
           </div>
         ) : (
-          <div className="flex flex-col justify-center items-center mb-10">
+          <div className="mb-10 flex flex-col items-center justify-center">
             <p className="text-1xl mb-3 opacity-20">pintando...</p>
             <BarLoader color="white" />
           </div>
         )}
       </section>
       <section ref={phraseRef} className="w-1/2 lowercase">
-        {parts.map((part, i) => (
-          <span key={i} className="sinusoidal-animation inline-block text-2xl m-1 scale-0 bg-white bg-opacity-15 p-2 rounded-2xl" style={{ animationDelay: i * 0.3 + 's' }}>
-            {part}
-          </span>
-        ))}
+        {generationError === 'phrase' ? null : (
+          <>
+            {parts.map((part, i) => (
+              <span key={i} className="sinusoidal-animation inline-block text-2xl m-1 scale-0 bg-white bg-opacity-15 p-2 rounded-2xl" style={{ animationDelay: i * 0.3 + 's' }}>
+                {part}
+              </span>
+            ))}
+          </>
+        )}
       </section>
       <section ref={formRef} className="absolute bottom-10 opacity-0">
         <label className="text-2xl mr-2">autor : </label>
