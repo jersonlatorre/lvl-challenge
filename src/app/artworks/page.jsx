@@ -19,7 +19,7 @@ export default function Artworks() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold mt-10 text-center">Obras</h1>
+      <h1 className="text-3xl font-bold mt-10 text-center">el museo</h1>
       <div className="bg-white flex flex-wrap w-screen p-5">
         {artworks?.map((artwork) => (
           <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-3" key={artwork.id}>
@@ -41,7 +41,7 @@ export default function Artworks() {
         ))}
       </div>
       <a href="/" className="absolute top-10 left-5 text-md ml-4 hover:text-gray-400">
-        <span>{'< atrás'}</span>
+        <span>← salir del museo</span>
       </a>
     </>
   )

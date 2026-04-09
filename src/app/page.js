@@ -22,6 +22,21 @@ export default function Home() {
   const [fade, setFade] = useState(true)
   const [, setArtworks] = useLocalStorage('artworks', [])
 
+  const handleBack = () => {
+    setFade(false)
+    setTimeout(() => {
+      Global.numClicks = 0
+      Global.selectedItems = []
+      setPhrase('')
+      setImageUrl('')
+      setGenerationError(null)
+      setEmojis([])
+      setId('')
+      setState('select')
+      setFade(true)
+    }, 500)
+  }
+
   useEffect(() => {
     const handleComplete = () => {
       setFade(false)
@@ -55,12 +70,12 @@ export default function Home() {
         setGenerationError('phrase')
         return
       }
-      const fetchedPhrase = await phraseRes.text()
+      const { frase, descripcionImagen } = await phraseRes.json()
       setEmojis(emojisSymbols)
-      setPhrase(fetchedPhrase)
+      setPhrase(frase)
 
-      const uriPhrase = encodeURIComponent(fetchedPhrase)
-      const imageRes = await fetch(`/api/?type=image&phrase=${uriPhrase}`)
+      const uriDescription = encodeURIComponent(descripcionImagen)
+      const imageRes = await fetch(`/api/?type=image&description=${uriDescription}`)
       if (!imageRes.ok) {
         const err = await imageRes.json().catch(() => ({}))
         console.error(err.error || imageRes.statusText)
@@ -72,7 +87,7 @@ export default function Home() {
 
       setArtworks((prev) => [
         ...(prev ?? []),
-        { id: newId, phrase: fetchedPhrase, imageUrl: fetchedImageUrl, emojis: emojisSymbols, author: '' },
+        { id: newId, phrase: frase, imageUrl: fetchedImageUrl, emojis: emojisSymbols, author: '' },
       ])
     }
 
@@ -85,7 +100,7 @@ export default function Home() {
     <div className={`transition-opacity duration-500 ${fade ? 'opacity-100' : 'opacity-0'}`}>
       {state === 'select' && <ReactP5Wrapper sketch={sketch} />}
       {state === 'result' && (
-        <Result id={id} phrase={phrase} imageUrl={imageUrl} emojis={emojis} generationError={generationError} />
+        <Result id={id} phrase={phrase} imageUrl={imageUrl} emojis={emojis} generationError={generationError} onBack={handleBack} />
       )}
     </div>
   )
