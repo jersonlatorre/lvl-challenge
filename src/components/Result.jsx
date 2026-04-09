@@ -143,7 +143,7 @@ export default function Result({ id, phrase, imageUrl, emojis, generationError, 
       canvas.toBlob((b) => {
         const a = document.createElement('a')
         a.href = URL.createObjectURL(b)
-        a.download = 'obra.png'
+        a.download = `obra-${id}.png`
         a.click()
       }, 'image/png')
     } catch (err) {
@@ -205,7 +205,6 @@ export default function Result({ id, phrase, imageUrl, emojis, generationError, 
             )}
             {(!imageReady && !imageError) && (
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-xl">
-                <p className="mb-3 text-xl opacity-20">el lienzo está considerando sus opciones...</p>
                 <BarLoader color="white" />
               </div>
             )}
@@ -224,7 +223,7 @@ export default function Result({ id, phrase, imageUrl, emojis, generationError, 
           className="flex items-center gap-2 rounded-2xl bg-white/10 px-5 py-2 text-sm text-white/70 transition hover:bg-white/20 hover:text-white disabled:opacity-40"
         >
           {downloading ? (
-            'enrollando el lienzo con mucho cuidado...'
+            'descargando...'
           ) : (
             <>
               <svg
